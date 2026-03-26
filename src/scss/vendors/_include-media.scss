@@ -1,0 +1,60 @@
+@function parse-condition($condition) {
+	$ops: ('>=', '<=', '>', '<', '=');
+	$dimension: 'width';
+	
+	@each $op in $ops {
+		@if str-index($condition, $op) == 1 {
+			$raw: str-slice($condition, str-length($op) + 1);
+			
+			// support for height conditions: height>=600px
+			@if str-index($raw, 'height') == 1 {
+				$dimension: 'height';
+				$raw: str-slice($raw, 7);
+			}
+			
+			// check if breakpoint exists in map
+			@if map-has-key($breakpoints, $raw) {
+				$value: map-get($breakpoints, $raw);
+				@return "(#{$dimension} #{$op} #{$value})";
+			}
+			
+			// check if value is a valid CSS length
+			@if str-index($raw, 'px') == null
+			and str-index($raw, 'em') == null
+			and str-index($raw, 'rem') == null
+			and str-index($raw, 'vw') == null
+			and str-index($raw, 'vh') == null
+			and str-index($raw, '%') == null {
+				@error "Breakpoint or value `#{$raw}` not found";
+			}
+			
+			// return custom length value
+			@return "(#{$dimension} #{$op} #{$raw})";
+		}
+	}
+	
+	@error "Invalid condition format: `#{$condition}`";
+}
+
+@mixin media($conditions...) {
+	// prevent empty media call
+	@if length($conditions) == 0 {
+		@error "media() requires at least one condition";
+	}
+	
+	$query: '';
+	
+	@for $i from 1 through length($conditions) {
+		$part: parse-condition(nth($conditions, $i));
+		
+		@if $i == 1 {
+			$query: $part;
+		} @else {
+			$query: "#{$query} and #{$part}";
+		}
+	}
+	
+	@media #{$query} {
+		@content;
+	}
+}

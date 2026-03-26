@@ -1,0 +1,85 @@
+// --------------------------------------
+// LIST RESET
+// --------------------------------------
+// Removes default list styles (margin, padding, bullets)
+// Usage: @extend %list-reset;
+// Examples:
+//   ul { @extend %list-reset; }
+//   ol.menu { @extend %list-reset; }
+%listreset {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// --------------------------------------
+// CLEARFIX
+// --------------------------------------
+// Classic clearfix helper for floated children
+// Usage: @extend %clearfix;
+// Examples:
+//   .container { @extend %clearfix; }
+//   .layout { @extend %clearfix; }
+%clearfix {
+  &::after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+}
+
+// --------------------------------------
+// TRANSITION
+// --------------------------------------
+// Default transition preset using global animation speed
+// Usage: @extend %transition;
+// Examples:
+//   .btn { @extend %transition; }
+//   .card { @extend %transition; }
+%transition {
+  transition: all $animation-speed ease-in-out;
+}
+
+// --------------------------------------
+// JUSTIFY NAV
+// --------------------------------------
+// Justified navigation for inline-block items
+// Fills full width by stretching last pseudo-element
+// Usage: @extend %justify;
+// Examples:
+//   .nav { @extend %justify; }
+//   .menu { @extend %justify; }
+%justify {
+  text-align: justify;
+  font-size: 1px;
+  line-height: 0;
+
+  > * {
+    display: inline-block;
+    vertical-align: top;
+    text-align: left;
+    font-size: $body-font-size;
+    line-height: $body-line-height;
+  }
+
+  &::after {
+    content: '';
+    display: inline-block;
+    width: 100%;
+    vertical-align: top;
+  }
+}
+
+// --------------------------------------
+// ELLIPSIS
+// --------------------------------------
+// Single-line text truncation with ellipsis
+// Usage: @extend %ellipsis;
+// Examples:
+//   .title { @extend %ellipsis; }
+//   .label { @extend %ellipsis; }
+%ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

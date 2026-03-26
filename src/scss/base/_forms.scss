@@ -1,0 +1,90 @@
+// forms
+form,
+fieldset {
+	margin: 0;
+	padding: 0;
+	border-style: none;
+}
+
+input[type='text'],
+input[type='tel'],
+input[type='email'],
+input[type='search'],
+input[type='password'],
+//input[type='url'],
+// input[type='date'],
+textarea {
+	-webkit-appearance: none;
+	-webkit-border-radius: 0;
+	box-sizing: border-box;
+	background: var(--bg-secondary);
+	border: 1px solid #181818;
+	padding: 10px 15px;
+	width: 100%;
+	outline: none;
+	font-size: 16px;
+	line-height: 1;
+	font-weight: 500;
+	color: var(--gray);
+
+	@include media('>=desktop') {
+		padding: 15px 30px;
+		font-size: 22px;
+	}
+
+	// &:hover {
+
+	// }
+
+	// &:focus {
+	// 	border-color: #000;
+	// }
+
+	@include placeholder {
+		color: var(--placeholder-color);
+	}
+}
+
+select {
+	-webkit-border-radius: 0;
+}
+
+textarea {
+	resize: vertical;
+	vertical-align: top;
+	min-height: 200px;
+	height: 150px;
+	max-height: 250px;
+}
+
+button,
+input[type='button'],
+input[type='reset'],
+input[type='file'],
+input[type='submit'] {
+	-webkit-appearance: none;
+	-webkit-border-radius: 0;
+	cursor: pointer;
+	outline: none;
+	border: none;
+}
+
+.form-field {
+	margin-bottom: 25px;
+
+	&.submit-field {
+		margin-bottom: 0;
+	}
+}
+
+.columns-block {
+	
+	@include media('>=desktop') {
+		display: flex;
+		gap: 0 25px;
+	}
+
+	.form-field {
+		flex: 1;
+	}
+}

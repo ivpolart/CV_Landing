@@ -1,0 +1,231 @@
+@use "sass:math";
+
+// ================================
+// LINK-TEXT-DECORATION
+// ================================
+// Toggles underline behavior on hover/focus
+// @param {String} $value - 'underline' or 'none'
+// @example scss:
+//   a { @include link-text-decoration; }
+//   a { @include link-text-decoration(none); }
+@mixin link-text-decoration($value: underline) {
+  text-decoration: if($value == underline, underline, none);
+  
+  &:hover,
+  &:focus {
+    text-decoration: if($value == underline, none, underline);
+  }
+}
+
+// ================================
+// V-ALIGN
+// ================================
+// Vertical align children inside parent with fixed height
+// @param {Length} $va-height - parent height or min-height
+// @param {String} $va-direction - top | middle | bottom
+// @param {String} $va-pseudo - before | after
+// @example scss:
+//   .parent { @include v-align; }
+//   .parent { @include v-align(250px, bottom, before); }
+@mixin v-align($va-height: 100%, $va-direction: middle, $va-pseudo: after) {
+  white-space: nowrap;
+  text-align: center;
+  
+  &:#{$va-pseudo} {
+    content: '';
+    display: inline-block;
+    vertical-align: $va-direction;
+    width: 0;
+    min-height: $va-height;
+  }
+  
+  > * {
+    white-space: normal;
+    display: inline-block;
+    vertical-align: $va-direction;
+    max-width: 99%;
+  }
+}
+
+// ================================
+// V-ALIGN-PAIR
+// ================================
+// Vertical align two specific children inside parent
+// @example scss:
+//   .post { @include v-align-pair(image, text); }
+//   .post { @include v-align-pair(image, text, bottom, 200px, auto); }
+@mixin v-align-pair($child1, $child2, $valign: middle, $width1: auto, $width2: auto) {
+  display: table;
+  
+  .#{$child1}, .#{$child2} {
+    display: table-cell;
+    vertical-align: $valign;
+  }
+  
+  .#{$child1} { width: $width1; }
+  .#{$child2} { width: $width2; }
+}
+
+// ================================
+// VERTICAL-ALIGN-EL
+// ================================
+// Vertically center element using transform
+// @example scss:
+//   .item { @include vertical-align-el; }
+//   .modal { @include vertical-align-el; }
+@mixin vertical-align-el {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+// ================================
+// SIZE
+// ================================
+// Set width and height at the same time
+// @example scss:
+//   .box { @include size(100px); }
+//   .banner { @include size(100%, 300px); }
+@mixin size($width, $height: $width) {
+  width: $width;
+  height: $height;
+}
+
+// ================================
+// FONT-SMOOTHING
+// ================================
+// Enable or disable font smoothing
+// @example scss:
+//   body { @include font-smoothing(on); }
+//   .pixel-text { @include font-smoothing(off); }
+@mixin font-smoothing($value: on) {
+  @if $value == on {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  } @else {
+    -webkit-font-smoothing: subpixel-antialiased;
+    -moz-osx-font-smoothing: auto;
+  }
+}
+
+// ================================
+// VISUALLY HIDDEN
+// ================================
+// Hide element visually but keep accessible
+// @example scss:
+//   .sr-only { @include visually-hidden; }
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// ================================
+// TRIANGLE
+// ================================
+// Generate CSS triangle using borders
+// @param $size - width or width height
+// @param $color - foreground or foreground background
+// @param $direction - up | down | left | right | up-right | up-left | down-right | down-left | inset-*
+// @example scss:
+//   .arrow { @include triangle(12px, gray, down); }
+//   .tooltip { @include triangle(10px 6px, black transparent, up); }
+@mixin triangle($size, $color, $direction) {
+  $w: nth($size, 1);
+  $h: nth($size, length($size));
+  $fg: nth($color, 1);
+  $bg: if(length($color) == 2, nth($color, 2), transparent);
+  
+  width: 0;
+  height: 0;
+  
+  @if index(up down left right, $direction) {
+    $w: math.div($w, 2);
+    $h: if(length($size) > 1, $h, math.div($h, 2));
+    
+    @if $direction == up { border-bottom: $h solid $fg; border-left: $w solid $bg; border-right: $w solid $bg; }
+    @else if $direction == down { border-top: $h solid $fg; border-left: $w solid $bg; border-right: $w solid $bg; }
+    @else if $direction == left { border-right: $h solid $fg; border-top: $w solid $bg; border-bottom: $w solid $bg; }
+    @else if $direction == right { border-left: $h solid $fg; border-top: $w solid $bg; border-bottom: $w solid $bg; }
+  } @else if index(up-right up-left down-right down-left, $direction) {
+    @if $direction == up-right { border-top: $h solid $fg; border-left: $w solid $bg; }
+    @else if $direction == up-left { border-top: $h solid $fg; border-right: $w solid $bg; }
+    @else if $direction == down-right { border-bottom: $h solid $fg; border-left: $w solid $bg; }
+    @else if $direction == down-left { border-bottom: $h solid $fg; border-right: $w solid $bg; }
+  } @else if index(inset-up inset-down inset-left inset-right, $direction) {
+    @if $direction == inset-up { border-width: $h $w; border-style: solid; border-color: $bg $bg $fg; }
+    @else if $direction == inset-down { border-width: $h $w; border-style: solid; border-color: $fg $bg $bg; }
+    @else if $direction == inset-left { border-width: $w $h; border-style: solid; border-color: $bg $fg $bg $bg; }
+    @else if $direction == inset-right { border-width: $w $h; border-style: solid; border-color: $bg $bg $bg $fg; }
+  }
+}
+
+// ================================
+// ANIMATE
+// ================================
+// Build complex transition declarations
+// @example scss:
+//   .btn { @include animate((opacity 0.3s), (transform 0.3s ease)); }
+//   .card { @include animate((color 0.2s), (box-shadow 0.2s ease-in)); }
+@mixin animate($transitions...) {
+  $result: ();
+
+  @each $t in $transitions {
+    $property: null;
+    $duration: null;
+    $delay: 0s;
+    $easing: ease-in-out;
+
+    @each $val in if(type-of($t) == list, $t, ($t,)) {
+      @if type-of($val) == number and unit($val) == "s" {
+        @if $duration == null { $duration: $val; }
+        @else { $delay: $val; }
+      } @else if $property == null {
+        $property: $val;
+      } @else {
+        $easing: $val;
+      }
+    }
+
+    @if $duration == null {
+      $duration: $animation-speed;
+    }
+
+    $result: append($result, $property $duration $delay $easing, comma);
+  }
+
+  transition: $result;
+}
+
+// ================================
+// REM-FONT-SIZE
+// ================================
+// Convert px font-size to rem (1rem = 10px)
+// @example scss:
+//   .text { @include rem-font-size(16px); }
+//   h1 { @include rem-font-size(32px); }
+@mixin rem-font-size($px) {
+  font-size: $px;
+  font-size: math.div($px, 10px) * 1rem;
+}
+
+// ================================
+// PLACEHOLDER
+// ================================
+// Cross-browser placeholder styling
+// @example scss:
+//   input { @include placeholder { color: #999; } }
+//   textarea { @include placeholder { opacity: .5; } }
+@mixin placeholder {
+  &::-webkit-input-placeholder { @content }
+  &::-moz-placeholder { opacity: 1; @content }
+  &:-moz-placeholder { @content }
+  &:-ms-input-placeholder { @content }
+  &.placeholder { @content }
+}

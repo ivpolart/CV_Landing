@@ -1,0 +1,29 @@
+html {
+	box-sizing: border-box;
+
+	@include media('>=desktop') {
+		scroll-behavior: smooth;
+		scroll-padding-top: 100px;
+		// scroll-padding-bottom: 40px;
+		scroll-snap-type: y proximity;
+	}
+}
+
+*, *:before, *:after {
+	box-sizing: inherit;
+}
+
+body {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+// adaptive images
+img {
+	max-width: 100%;
+	height: auto;
+	vertical-align: top;
+}
+
+// google map fix
+.gm-style img {max-width: none}

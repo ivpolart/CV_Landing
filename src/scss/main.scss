@@ -1,0 +1,27 @@
+$breakpoints: (
+	'phoneSm': 320px,
+	'phone': 480px,
+	'tabletSm': 650px,
+	'tablet': 768px,
+	'desktop': 1024px,
+	'widescreen': 1200px
+);
+
+// ligatured operators ≥ ≤
+@import 'vendors/include-media';
+@import 'vendors/normalize';
+@import 'vendors/fonts';
+
+@import 'base/functions';
+@import 'base/variables';
+@import 'base/mixins';
+@import 'base/helpers';
+@import 'base/reset';
+@import 'base/typography';
+@import 'base/forms';
+
+@import 'layouts/header';
+@import 'layouts/common';
+@import 'layouts/footer';
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Russo+One&display=swap');

@@ -1,0 +1,44 @@
+// Colors
+// $black: #000;
+// $black-main: #060606;
+// $gray: #868484;
+// $dark-gray: #0D0D0D;
+// $dark-gray500: #383838;
+// $white: #fff;
+
+// $blue: #4083FF;
+// $light-blue: #6192ED;
+
+// $gradient: linear-gradient(90deg, #868484 0%, #4083FF 59.62%);
+
+
+// Fonts
+$font-sans-serif: 'Russo One', 'Arial', 'Helvetica', sans-serif;
+$secondary-sans-serif: 'DM Sans', 'Arial', 'Helvetica', sans-serif;
+$font-serif:	  'Times New Roman', 'Times', serif;
+
+// Body styles
+$body-background-color: #060606;
+$body-text-weight:		400;
+$body-font-size: 		16px;
+$body-line-height:		1.25;
+$body-font-family:		$secondary-sans-serif;
+$body-text-color:		var(--gray);
+$body-min-width:		320px;
+
+//p, ul, ol margins
+$paragraph-margins: 0 0 1em;
+
+// Link
+$link-color:		   inherit;
+$link-text-decoration: underline;
+
+// Headings
+$headings-font-weight: 400;
+$headings-font-family: $font-sans-serif;
+$headings-color:	   inherit;
+
+// Default html and body font-size for the base rem value.
+$rem-base: 16px;
+$vertical-rhythm: ($body-line-height * 1em);
+$animation-speed: 0.2s;

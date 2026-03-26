@@ -1,0 +1,29 @@
+// Typography
+body {
+	background: $body-background-color;
+	color: $body-text-color;
+	font: $body-text-weight #{$body-font-size}/#{$body-line-height} $body-font-family;
+	min-width: $body-min-width;
+}
+
+p, ul, ol, dl {
+	margin: $paragraph-margins;
+}
+
+a {
+	@include link-text-decoration($link-text-decoration);
+
+	color: $link-color;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: $headings-font-family;
+	font-weight: $headings-font-weight;
+	margin: 0 0 0.5em;
+	color: $headings-color;
+}

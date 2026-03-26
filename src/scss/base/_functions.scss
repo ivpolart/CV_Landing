@@ -1,0 +1,118 @@
+@use "sass:math";
+
+// ================================
+// STRIP UNIT
+// ================================
+// Removes unit from a number and returns a unitless value
+// @param {Number} $num
+// @return {Number}
+// Examples:
+//   strip-unit(16px) → 16
+//   strip-unit(1.5rem) → 1.5
+@function strip-unit($num) {
+  @return math.div($num, ($num * 0 + 1));
+}
+
+// ================================
+// CONVERT TO REM
+// ================================
+// Converts a value to rem based on a base value
+// @param {Number} $value - value to convert
+// @param {Number} $base-value - base font size
+// @return {Number} rem
+// Examples:
+//   convert-to-rem(16px) → 1.6rem
+//   convert-to-rem(24px, 12px) → 2rem
+@function convert-to-rem($value, $base-value: $rem-base) {
+  $value: math.div(strip-unit($value), strip-unit($base-value)) * 1rem;
+
+  // Normalize zero values
+  @if $value == 0rem {
+    $value: 0;
+  }
+
+  @return $value;
+}
+
+// ================================
+// REM CALC
+// ================================
+// Converts one or multiple values to rem
+// Supports space- or comma-separated lists
+//
+// Examples:
+//   rem-calc(10 20 30px 40);
+//   rem-calc((10, 20, 30, 40px));
+//   rem-calc(16px 32px 48px, 8px);
+//   rem-calc((16px, 32px, 48), 8px);
+@function rem-calc($values, $base-value: $rem-base) {
+  $max: length($values);
+
+  @if $max == 1 {
+    @return convert-to-rem(nth($values, 1), $base-value);
+  }
+
+  $rem-values: ();
+
+  @for $i from 1 through $max {
+    $rem-values: append(
+      $rem-values,
+      convert-to-rem(nth($values, $i), $base-value)
+    );
+  }
+
+  @return $rem-values;
+}
+
+// ================================
+// EM CALC
+// ================================
+// Converts values to em via rem calculation
+// @param {List} $values
+// @param {Number} $base-value
+// @return {List|Number} em
+// Examples:
+//   em-calc(16px) → 1.6em
+//   em-calc(16px 32px) → 1.6em 3.2em
+@function em-calc($values, $base-value: $rem-base) {
+  $rem-values: rem-calc($values, $base-value);
+  $max: length($rem-values);
+
+  @if $max == 1 {
+    @return strip-unit(nth($rem-values, 1)) * 1em;
+  }
+
+  $em-values: ();
+
+  @for $i from 1 through $max {
+    $em-values: append(
+      $em-values,
+      strip-unit(nth($rem-values, $i)) * 1em
+    );
+  }
+
+  @return $em-values;
+}
+
+// ================================
+// COLOR HELPERS
+// ================================
+// Shorthand helpers for rgba black/white
+// Examples:
+//   background: fade(#3498db, 0.5);
+//   color: fade(red, 0.9);
+@function fade($color, $opacity) {
+  @return rgba($color, $opacity);
+}
+
+
+@function fluid($min-size, $max-size, $min-vw: 320, $max-vw: 1920) {
+    $slope: calc(($max-size - $min-size) / ($max-vw - $min-vw));
+    $y-axis-intersection: $min-size - ($slope * $min-vw);
+    $vw-value: $slope * 100;
+
+    $clamp-min: if($min-size < $max-size, $min-size, $max-size);
+    $clamp-max: if($min-size < $max-size, $max-size, $min-size);
+
+    @return unquote("clamp(#{$clamp-min}px, calc(#{$y-axis-intersection}px + #{$vw-value}vw), #{$clamp-max}px)");
+}
