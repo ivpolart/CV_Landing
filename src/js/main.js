@@ -2,7 +2,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	themeToggle();
 	header();
 	horizontalScroll();
-	accordion()
+	accordion();
+	formSubmit();
 });
 
 function themeToggle() {
@@ -124,6 +125,43 @@ function accordion() {
 			panelClass: 'accordion__slide'
 		});
 	}
+}
+
+function formSubmit() {
+  const contactForm = document.getElementById('contactForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const thanksMsg = document.getElementById('thanksMsg');
+
+  contactForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(contactForm);
+
+    fetch("https://formspree.io/f/mzdkzdnn", {
+      method: "POST",
+	  headers: {
+		'Accept': 'application/json'
+	  },
+      body: formData,
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+	  submitBtn.disabled = true;
+	  return response.json();	  
+    })
+    .then((json) => {
+		if (json.ok) {
+			thanksMsg.style.display = 'block';
+			contactForm.reset();
+			submitBtn.disabled = false;
+		}
+    })
+	.catch(error => {
+		console.error("Error sending form:", error);
+	});
+  })
 }
 
 

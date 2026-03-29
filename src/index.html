@@ -364,7 +364,7 @@
 								<h2><mark>Contact</mark></h2>
 							</div>
 							<div class="form-holder">
-								<form action="https://formspree.io/f/mzdkzdnn" method="POST">
+								<form id="contactForm" action="#">
 									<input type="text" name="company" style="display:none">
 									<div class="columns-block">
 										<div class="form-field">
@@ -381,11 +381,14 @@
 										<textarea cols="40" rows="10" maxlength="2000" id="textarea" aria-required="true" placeholder="Message" name="message"></textarea>
 									</div>
 									<div class="form-field submit-field">
-									<button class="btn" type="submit" name="submit">
+									<button id="submitBtn" class="btn" type="submit" name="submit">
 										Send
 									</button>
 									</div>
 								</form>
+							</div>
+							<div id="thanksMsg">
+								<p>Thank you! Your message has been sent successfully.</p>
 							</div>
 						</div>
 					</section>

@@ -6,11 +6,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Ivan Polozkov</title>
 	<!-- Start:css -->
-	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="css/main.min.css">
 	<!-- End:css -->
 	<script src="https://code.jquery.com/jquery-3.6.4.min.js" defer></script>
 	<!-- Start:js -->
-	<script src="js/main.js" defer></script>
+	<script src="js/main.min.js" defer></script>
 	<!-- End:js -->
 </head>
 <body>
@@ -374,7 +374,7 @@
 								<h2><mark>Contact</mark></h2>
 							</div>
 							<div class="form-holder">
-								<form action="https://formspree.io/f/mzdkzdnn" method="POST">
+								<form id="contactForm" action="#">
 									<input type="text" name="company" style="display:none">
 									<div class="columns-block">
 										<div class="form-field">
@@ -391,11 +391,14 @@
 										<textarea cols="40" rows="10" maxlength="2000" id="textarea" aria-required="true" placeholder="Message" name="message"></textarea>
 									</div>
 									<div class="form-field submit-field">
-									<button class="btn" type="submit" name="submit">
+									<button id="submitBtn" class="btn" type="submit" name="submit">
 										Send
 									</button>
 									</div>
 								</form>
+							</div>
+							<div id="thanksMsg">
+								<p>Thank you! Your message has been sent successfully.</p>
 							</div>
 						</div>
 					</section>
