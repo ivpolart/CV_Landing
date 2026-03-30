@@ -129,13 +129,85 @@ function accordion() {
 
 function formSubmit() {
   const contactForm = document.getElementById('contactForm');
-  const submitBtn = document.getElementById('submitBtn');
   const thanksMsg = document.getElementById('thanksMsg');
+  const submitBtn = contactForm.querySelector('#submitBtn');
+  const errorMsg = contactForm.querySelector('.form_error-message');
+  const input = contactForm.querySelectorAll('input, textarea');
+
+  errorMsg.style.display = 'none';
+  thanksMsg.style.display = 'none';
+
+	document.getElementById('close-btn').addEventListener('click', () => {
+		thanksMsg.style.display = 'none';
+	});
+
+	input.forEach(el => el.addEventListener('input', () => {
+		el.classList.remove('error');
+		const errorEl = el.parentNode.querySelector('.error-message');
+		if (errorEl) {
+			errorEl.remove();
+		}
+	}));
+
+	function clearErrors() {
+		contactForm.querySelectorAll(".error").forEach(el => el.classList.remove("error"));
+		contactForm.querySelectorAll(".error-message").forEach(el => el.remove());
+	}
+	
+	function showError(inputEl, message) {
+		inputEl.classList.add('error');
+		const msgEl = document.createElement('div');
+		msgEl.classList.add('error-message');
+		msgEl.textContent = message;
+		inputEl.parentNode.appendChild(msgEl);
+	}
+
+	function validateForm() {
+		clearErrors()
+
+		const firstName = contactForm.querySelector('input[name="firstname"]').value.trim();
+		const lastName = contactForm.querySelector('input[name="lastname"]').value.trim();
+		const email = contactForm.querySelector('input[name="email"]').value.trim();
+		const message = contactForm.querySelector('textarea[name="message"]').value.trim();
+
+		let isValid = true;
+
+		if (firstName.length < 2 || firstName.length > 50) {
+			isValid = false;
+			showError(contactForm.querySelector('input[name="firstname"]'), 'First name must be between 2 and 50 characters.');
+		}
+
+		if (lastName.length < 2 || lastName.length > 50) {
+			isValid = false;
+			showError(contactForm.querySelector('input[name="lastname"]'), 'Last name must be between 2 and 50 characters.');
+		}
+
+		if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 100) {
+			isValid = false;
+			showError(contactForm.querySelector('input[name="email"]'), 'Invalid email format or too long.');
+		}
+
+		if (message.length < 10 || message.length > 1000) {
+			isValid = false;
+			showError(contactForm.querySelector('textarea[name="message"]'), 'Message must be between 10 and 1000 characters.');
+		}
+
+		return isValid;
+	}
 
   contactForm.addEventListener('submit', (event) => {
     event.preventDefault();
 
+	thanksMsg.style.display = 'none';
+	errorMsg.style.display = 'none';
+
+	if (!validateForm()) return;
+
     const formData = new FormData(contactForm);
+
+	submitBtn.disabled = true;
+	submitBtn.textContent = 'Sending...';
+
 
     fetch("https://formspree.io/f/mzdkzdnn", {
       method: "POST",
@@ -148,18 +220,23 @@ function formSubmit() {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-	  submitBtn.disabled = true;
-	  return response.json();	  
+
+	  return response.json();
     })
     .then((json) => {
 		if (json.ok) {
-			thanksMsg.style.display = 'block';
 			contactForm.reset();
-			submitBtn.disabled = false;
+			thanksMsg.style.display = 'block';
 		}
     })
 	.catch(error => {
 		console.error("Error sending form:", error);
+		
+		errorMsg.style.display = 'block';
+	})
+	.finally(() => {
+		submitBtn.disabled = false;
+		submitBtn.textContent = 'Send';
 	});
   })
 }

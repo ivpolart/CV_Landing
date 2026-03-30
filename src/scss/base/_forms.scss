@@ -43,6 +43,10 @@ textarea {
 	@include placeholder {
 		color: var(--placeholder-color);
 	}
+
+	&.error {
+		border-color: var(--red);
+	}
 }
 
 select {
@@ -74,6 +78,20 @@ input[type='submit'] {
 
 	&.submit-field {
 		margin-bottom: 0;
+
+		@include media('>=tablet') {
+			display: flex;
+			align-items: center;
+			gap: 0 10px;
+		}
+	}
+
+	.form_error-message {
+		margin: 10px 0 0;
+
+		@include media('>=tablet') {
+			margin: 0;
+		}
 	}
 }
 
@@ -87,4 +105,10 @@ input[type='submit'] {
 	.form-field {
 		flex: 1;
 	}
+}
+
+.form_error-message,
+.error-message {
+	font-size: 14px;
+	color: var(--red);
 }
